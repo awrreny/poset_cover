@@ -19,11 +19,7 @@ def main():
         
     queues = queue_input.strip().split(args.s)
 
-    # golang moment
-    err = validate_input(queues)
-    if err:
-        print(err)
-        exit()
+    validate_input(queues)
 
     # generate mapping from letters to numbers to convert tetris queue input to normal permutation input e.g. TSZ|TZS -> (1,2,3),(1,3,2)
     representative = queues[0]
@@ -63,9 +59,9 @@ def main():
 
 # require: nonempty input, all queues same length, no duplicates in any queue, all queues have the same set of letters
 # returns None if valid and str otherwise
-def validate_input(queues: list[str]) -> str | None:
+def validate_input(queues: list[str]):
     if len(queues) == 0:
-        return "Empty Input"
+        raise ValueError("Empty Input")
     
     representative = queues[0]
     req_len = len(representative)
@@ -73,17 +69,13 @@ def validate_input(queues: list[str]) -> str | None:
 
     for queue in queues:
         if len(queue) != req_len:
-            return "diff len"
+            # TODO it is possible to deal with an input like this but would require a refactor
+            raise ValueError(f"Input permutations {representative} and {queue} differ in length")
         chars = set(queue)
         if len(chars) != len(queue):
-            return "duplicates"
+            raise ValueError(f"Input permutation {queue} has duplicate characters")
         if chars != req_chars:
-            return "diff chars"
-        
-    return None
-
-
-
+            raise ValueError(f"Input permutations {representative} and {queue} differ in characters")
 
 
 # converts A<B & A<C to A<BC and likewise for other side
