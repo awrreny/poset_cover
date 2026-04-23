@@ -1,16 +1,23 @@
+import argparse
 from core import perms_to_dnf_tree
 from parse_espresso_tree import *
 from collections import defaultdict
 
-INPUT_FILENAME = "testinput.txt"
-INPUT_SEP='\n'
-
-
-
 def main():
-    with open(INPUT_FILENAME, 'r') as f:
+    parser = argparse.ArgumentParser(description="Simplify queues")
+    parser.add_argument("-i", default="testinput.txt", help="Input file")
+    parser.add_argument("-s", default="\n", help="Input separator (default newline)")
+    parser.add_argument("-o", help="Output file (leave blank to print to stdout)")
+    
+    args = parser.parse_args()
+
+    if args.s == "\\n":
+        args.s = "\n"
+
+    with open(args.i, 'r') as f:
         queue_input = f.read()
-    queues = queue_input.split(INPUT_SEP)
+        
+    queues = queue_input.strip().split(args.s)
 
     # golang moment
     err = validate_input(queues)
@@ -44,7 +51,12 @@ def main():
 
     tree = tree_substitute(tree, remove_redundant_nodes)
 
-    print(tree)
+    if args.o:
+        with open(args.o, 'w') as f:
+            f.write(str(tree))
+            f.write("\n")
+    else:
+        print(tree)
 
 
 
