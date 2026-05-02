@@ -38,3 +38,8 @@ This tool was initially made for Tetris research, so some of the notation may re
 
 In the final output, `X<YZ` is shorthand for `X<Y & X<Z`, and similarly `XY<Z` is shorthand for `X<Z & Y<Z`.
 
+### Tetris Research
+
+For those using this tool for Tetris, consider the effect of `hold` on the set of queues being input.
+
+If using this to characterise the cover of a solve or build, the set of queues possible without `hold` will give much less noisy results.
